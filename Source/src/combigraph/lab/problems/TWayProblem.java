@@ -240,4 +240,31 @@ public class TWayProblem extends CombinatorialTestingProblem
 		e.setInput(V, m_v);
 		e.setInput(N, m_n);
 	}
+	
+	/**
+	 * Gets the interaction strength of the problem
+	 * @return The value
+	 */
+	public int getT()
+	{
+		return m_t;
+	}
+	
+	/**
+	 * Gets the domain size of the problem
+	 * @return The value
+	 */
+	public int getV()
+	{
+		return m_v;
+	}
+	
+	/**
+	 * Gets the number of parameters of the problem
+	 * @return The value
+	 */
+	public int getN()
+	{
+		return m_n;
+	}
 }

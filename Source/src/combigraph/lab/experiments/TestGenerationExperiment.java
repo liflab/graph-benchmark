@@ -58,6 +58,10 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 		long time_start = System.currentTimeMillis();
 		String tool_output = runTool();
 		long time_end = System.currentTimeMillis();
+		if (tool_output == null || tool_output.isEmpty())
+		{
+			throw new ExperimentException("The tool did not produce any output");
+		}
 		write(DURATION, time_end - time_start);
 		write(SIZE, getSize(tool_output));
 	}

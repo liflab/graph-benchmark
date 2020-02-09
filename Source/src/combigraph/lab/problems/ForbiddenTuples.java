@@ -19,6 +19,8 @@
 package combigraph.lab.problems;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.uqac.lif.labpal.Experiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
@@ -116,9 +118,21 @@ public class ForbiddenTuples extends UniversalProblem
 			String p2 = "p" + (n_i + 1);
 			for (int v_i = 0; v_i < m_fractionValues * m_v; v_i++)
 			{
-				System.out.println("Always !(" + p1 + "==" + v_i + " && " + p2  + " == 0)");
 				ps.println("Always !(" + p1 + "==" + v_i + " && " + p2  + " == 0)");
 			}
 		}
+	}
+	
+	public List<String> generateJennyWithoutParams()
+	{
+		List<String> list = new ArrayList<String>();
+		for (int n_i = 1; n_i <= m_fractionVars * m_n; n_i++)
+		{
+			for (int v_i = 0; v_i < m_fractionValues * m_v; v_i++)
+			{
+				list.add("-w" + n_i + JennyTestGenerationExperiment.FEATURES[v_i] + (n_i + 1) + JennyTestGenerationExperiment.FEATURES[0]);
+			}
+		}
+		return list;
 	}
 }

@@ -24,6 +24,8 @@ import ca.uqac.lif.labpal.Region;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
+import combigraph.lab.experiments.JennyForbiddenTuplesExperiment;
+import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.ForbiddenTuples;
@@ -58,6 +60,14 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		}
 		switch (tool_s)
 		{
+		case JennyTestGenerationExperiment.NAME:
+		{
+			if (problem instanceof ForbiddenTuples)
+			{
+				return new JennyForbiddenTuplesExperiment((ForbiddenTuples) problem);
+			}
+			return new JennyTestGenerationExperiment(problem);
+		}
 		case AllPairsTestGenerationExperiment.NAME:
 			return new AllPairsTestGenerationExperiment(problem);
 		case ColoringTestGenerationExperiment.NAME:

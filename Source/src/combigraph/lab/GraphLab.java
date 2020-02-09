@@ -27,6 +27,7 @@ import ca.uqac.lif.labpal.table.ExperimentTable;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
+import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TcasesTestGenerationExperiment;
 import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.experiments.TestingProblemExperiment;
@@ -93,6 +94,7 @@ public class GraphLab extends Laboratory
 		big_r.addRange(N, n_min, n_max);
 		big_r.add(TOOL_NAME, 
 				AllPairsTestGenerationExperiment.NAME,
+				JennyTestGenerationExperiment.NAME,
 				TcasesTestGenerationExperiment.NAME,
 				VPTagTestGenerationExperiment.NAME,
 				ColoringTestGenerationExperiment.NAME, 
@@ -177,6 +179,10 @@ public class GraphLab extends Laboratory
 	public String isEnvironmentOk()
 	{
 		String out = "";
+		if (!FileHelper.commandExists(JennyTestGenerationExperiment.JENNY))
+		{
+			out += "<li>Command <tt>jenny</tt> not found. Experiments involving running Jenny will not work</li>";
+		}
 		if (!FileHelper.fileExists("variables-to-graph.php"))
 		{
 			String script = FileHelper.internalFileToString(this, "../scripts/variables-to-graph.php");
@@ -189,8 +195,8 @@ public class GraphLab extends Laboratory
 		}
 		if (out != null && out.isEmpty())
 		{
-			out = null;
+			return null;
 		}
-		return out;
+		return "<ul>" + out + "</ul>";
 	}
 }
