@@ -56,7 +56,7 @@ public class GraphLab extends Laboratory
 	/**
 	 * If set to true, the tols for solving the problems will not be run
 	 */
-	public static boolean s_dryRun = true;
+	public static boolean s_dryRun = false;
 	
 	/**
 	 * Lower bound for parameter <i>t</i> in the experiments
@@ -182,7 +182,7 @@ public class GraphLab extends Laboratory
 					p_size.setCaption(Axis.Y, "Size");
 					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, ForbiddenTuples.FRACTION_VALUES, DURATION);
 					et_duration.setShowInList(false);
-					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_size);
+					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_duration);
 					m_titleNamer.setTitle(tt_duration, out_r, "Forbidden tuples ", " for duration");
 					Scatterplot p_duration = new Scatterplot(tt_duration);
 					p_duration.setTitle(tt_duration.getTitle());

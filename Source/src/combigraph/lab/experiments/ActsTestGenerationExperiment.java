@@ -21,14 +21,14 @@ package combigraph.lab.experiments;
 import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
-public class TcasesForbiddenTuplesExperiment extends TestGenerationExperiment
+public class ActsTestGenerationExperiment extends TestGenerationExperiment
 {
 	/**
 	 * Name of this particular tool
 	 */
-	public static final transient String NAME = "Tcases";
+	public static final transient String NAME = "IPOG";
 	
-	public TcasesForbiddenTuplesExperiment(CombinatorialTestingProblem problem)
+	public ActsTestGenerationExperiment(CombinatorialTestingProblem problem)
 	{
 		super(problem, NAME);
 	}

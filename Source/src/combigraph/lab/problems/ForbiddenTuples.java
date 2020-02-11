@@ -84,9 +84,10 @@ public class ForbiddenTuples extends UniversalProblem
 	public boolean supportedBy(String tool_name)
 	{
 		if (tool_name.compareTo(HypergraphTestGenerationExperiment.NAME) == 0 || 
-				tool_name.compareTo(JennyTestGenerationExperiment.NAME) == 0)
+				tool_name.compareTo(JennyTestGenerationExperiment.NAME) == 0 ||
+				tool_name.compareTo(TcasesTestGenerationExperiment.NAME) == 0)
 		{
-			// Only hypergraph and Jenny support forbidden tuples
+			// Only hypergraph, Tcases and Jenny support forbidden tuples
 			return true;
 		}
 		return false;
@@ -142,8 +143,8 @@ public class ForbiddenTuples extends UniversalProblem
 		ps.println("<System name=\"foo\">");
 		ps.println(" <Function name=\"test\">");
 		ps.println("  <Input>");
-		int highest_p = (int) (m_fractionVars * m_n);
-		int highest_v = (int) (m_fractionValues * m_v);
+		int highest_p = (int) (m_fractionVars * m_n) + 1;
+		int highest_v = (int) (m_fractionValues * m_v) + 1;
 		for (int n_i = 1; n_i <= m_n; n_i++)
 		{
 			ps.println("   <Var name=\"p" + n_i + "\">");
@@ -155,12 +156,12 @@ public class ForbiddenTuples extends UniversalProblem
 					String prop_name = "p" + n_i + "v" + v_i;
 					ps.print("property=\"" + prop_name + "\" ");
 				}
-				if (n_i > 0 && n_i <= highest_p && v_i == 0)
+				if (n_i > 1 && n_i <= highest_p && v_i == 1)
 				{
 					ps.print("whenNot=\"");
-					for (int vv_i = 0; vv_i < highest_v; vv_i++)
+					for (int vv_i = 1; vv_i < highest_v; vv_i++)
 					{
-						if (vv_i > 0)
+						if (vv_i > 1)
 						{
 							ps.print(",");
 						}

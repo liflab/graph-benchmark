@@ -26,6 +26,7 @@ import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyForbiddenTuplesExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
+import combigraph.lab.experiments.TcasesTestGenerationExperiment;
 import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.ForbiddenTuples;
@@ -67,6 +68,10 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 				return new JennyForbiddenTuplesExperiment((ForbiddenTuples) problem);
 			}
 			return new JennyTestGenerationExperiment(problem);
+		}
+		case TcasesTestGenerationExperiment.NAME:
+		{
+			return new TcasesTestGenerationExperiment(problem);
 		}
 		case AllPairsTestGenerationExperiment.NAME:
 			return new AllPairsTestGenerationExperiment(problem);

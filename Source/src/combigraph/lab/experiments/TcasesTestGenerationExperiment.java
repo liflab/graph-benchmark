@@ -36,7 +36,7 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 	/**
 	 * The regex pattern to look for in Tcases' output to count test cases
 	 */
-	protected static final transient Pattern s_pattern = Pattern.compile("<TestCase");
+	protected static final transient Pattern s_pattern = Pattern.compile("completed (\\d+) test");
 	
 	public TcasesTestGenerationExperiment(CombinatorialTestingProblem problem)
 	{
@@ -51,8 +51,10 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 			return "";
 		}
 		int t = ((TWayProblem) m_problem).getT();
-		String t_filename = TestGenerationExperiment.s_folder + "Tcases-t-" + t + ".xml";
-		String[] command = {"java", "-jar", "tcases.jar", "-g", t_filename, "-t", m_problem.getFilenameFor(NAME)};
+		// No need to prefix folder for t_filename; Tcases assumes same folder
+		// as input file
+		String t_filename = "Tcases-t-" + t + ".xml";
+		String[] command = {"java", "-jar", "tcases.jar", "-g", t_filename, m_problem.getFilenameFor(NAME)};
 		CommandRunner runner = new CommandRunner(command);
 		runner.run();
 		return runner.getString();
@@ -62,12 +64,11 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 	protected int getSize(String tool_output)
 	{
 		Matcher mat = s_pattern.matcher(tool_output);
-		int size = 0;
-		while (mat.find())
+		if (mat.find())
 		{
-			size++;
+			return Integer.parseInt(mat.group(1).trim());
 		}
-		return size;
+		return 0;
 	}
 
 }
