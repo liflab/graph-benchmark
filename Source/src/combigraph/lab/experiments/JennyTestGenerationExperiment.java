@@ -18,10 +18,13 @@
  */
 package combigraph.lab.experiments;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.lif.labpal.CommandRunner;
+import ca.uqac.lif.mtnp.util.FileHelper;
+import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.TWayProblem;
 
@@ -70,9 +73,15 @@ public class JennyTestGenerationExperiment extends TestGenerationExperiment
 			syntax.add(v);
 		}
 		syntax.addAll(getAdditionalParameters());
-		CommandRunner runner = new CommandRunner(toStringArray(syntax));
-		runner.run();
-		return runner.getString();
+		String syntax_filename = TestingProblemExperiment.s_folder + m_problem.getFilenameFor(JENNY) + ".sh";
+		FileHelper.writeFromString(new File(syntax_filename), "#! /bin/bash\n" + syntax);
+		if (!GraphLab.s_dryRun)
+		{
+			CommandRunner runner = new CommandRunner(toStringArray(syntax));
+			runner.run();
+			return runner.getString();
+		}
+		return "";
 	}
 
 	@Override

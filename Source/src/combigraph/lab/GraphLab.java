@@ -22,8 +22,14 @@ import ca.uqac.lif.json.JsonNumber;
 import ca.uqac.lif.labpal.FileHelper;
 import ca.uqac.lif.labpal.Group;
 import ca.uqac.lif.labpal.Laboratory;
+import ca.uqac.lif.labpal.LatexNamer;
 import ca.uqac.lif.labpal.Region;
+import ca.uqac.lif.labpal.TitleNamer;
 import ca.uqac.lif.labpal.table.ExperimentTable;
+import ca.uqac.lif.mtnp.plot.TwoDimensionalPlot.Axis;
+import ca.uqac.lif.mtnp.plot.gnuplot.Scatterplot;
+import ca.uqac.lif.mtnp.table.ExpandAsColumns;
+import ca.uqac.lif.mtnp.table.TransformedTable;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
@@ -47,6 +53,11 @@ import java.io.File;
 
 public class GraphLab extends Laboratory
 {
+	/**
+	 * If set to true, the tols for solving the problems will not be run
+	 */
+	public static boolean s_dryRun = true;
+	
 	/**
 	 * Lower bound for parameter <i>t</i> in the experiments
 	 */
@@ -76,16 +87,33 @@ public class GraphLab extends Laboratory
 	 * Upper bound for parameter <i>n</i> in the experiments
 	 */
 	public static int n_max = 20;
+	
+	/**
+	 * A name for LaTeX tables and figures
+	 */
+	LatexNamer m_latexNamer = new LatexNamer();
+	
+	/**
+	 * A title for tables and figures
+	 */
+	TitleNamer m_titleNamer = new TitleNamer();
 
 	@Override
 	public void setup()
 	{
+		// Default parameters
+		boolean with_t_way = false, with_forbidden_tuples = true;
+		
 		// Setup the lab's factory
 		TestGenerationExperimentFactory factory = new TestGenerationExperimentFactory(this);
 
 		// Create the data folder if it does not exist
 		File data_folder = new File(TestingProblemExperiment.s_folder);
 		data_folder.mkdir();
+		
+		t_max = 3;
+		v_max = 5;
+		n_max = 6;
 
 		// Setup the lab's regions
 		TWayRegion big_r = new TWayRegion();
@@ -101,6 +129,7 @@ public class GraphLab extends Laboratory
 				HypergraphTestGenerationExperiment.NAME);
 
 		// Classical t-way problems
+		if (with_t_way)
 		{
 			TWayRegion twr = new TWayRegion(big_r);
 			twr.add(TESTING_PROBLEM_NAME, TWayProblem.NAME);
@@ -130,9 +159,10 @@ public class GraphLab extends Laboratory
 		}
 
 		// Forbidden tuples
+		if (with_forbidden_tuples)
 		{
 			TWayRegion twr = new TWayRegion(big_r);
-			twr.addRange(N, n_min, n_max / 2);
+			//twr.addRange(N, n_min, n_max / 2);
 			twr.add(TESTING_PROBLEM_NAME, ForbiddenTuples.NAME);
 			twr.add(ForbiddenTuples.FRACTION_VALUES, 0, 0.1, 0.2, 0.5);
 			twr.add(ForbiddenTuples.FRACTION_VARS, 0, 0.1, 0.2, 0.5);
@@ -143,7 +173,21 @@ public class GraphLab extends Laboratory
 				for (Region out_r : twr.all(N, V, T))
 				{
 					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, ForbiddenTuples.FRACTION_VALUES, SIZE);
+					et_size.setShowInList(false);
+					TransformedTable tt_size = new TransformedTable(new ExpandAsColumns(TOOL_NAME, SIZE), et_size);
+					m_titleNamer.setTitle(tt_size, out_r, "Forbidden tuples ", " for size");
+					Scatterplot p_size = new Scatterplot(tt_size);
+					p_size.setTitle(tt_size.getTitle());
+					p_size.setCaption(Axis.X, "Fraction of tuples");
+					p_size.setCaption(Axis.Y, "Size");
 					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, ForbiddenTuples.FRACTION_VALUES, DURATION);
+					et_duration.setShowInList(false);
+					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_size);
+					m_titleNamer.setTitle(tt_duration, out_r, "Forbidden tuples ", " for duration");
+					Scatterplot p_duration = new Scatterplot(tt_duration);
+					p_duration.setTitle(tt_duration.getTitle());
+					p_duration.setCaption(Axis.X, "Fraction of tuples");
+					p_duration.setCaption(Axis.Y, "Duration");
 					for (Region in_r : out_r.all(TOOL_NAME, ForbiddenTuples.FRACTION_VALUES, ForbiddenTuples.FRACTION_VARS))
 					{
 						float frac_vars = ((JsonNumber) in_r.get(ForbiddenTuples.FRACTION_VARS)).numberValue().floatValue();
@@ -163,8 +207,10 @@ public class GraphLab extends Laboratory
 						et_duration.add(exp);
 						g.add(exp);
 					}
-					add(et_size);
-					add(et_duration);
+					add(et_size, tt_size);
+					add(p_size);
+					add(et_duration, tt_duration);
+					add(p_duration);
 				}
 			}
 		}
@@ -191,7 +237,7 @@ public class GraphLab extends Laboratory
 		if (!FileHelper.fileExists("variables-to-hypergraph.php"))
 		{
 			String script = FileHelper.internalFileToString(this, "../scripts/variables-to-hypergraph.php");
-			FileHelper.writeFromString(new File("variables-to-graph.php"), script);
+			FileHelper.writeFromString(new File("variables-to-hypergraph.php"), script);
 		}
 		if (out != null && out.isEmpty())
 		{

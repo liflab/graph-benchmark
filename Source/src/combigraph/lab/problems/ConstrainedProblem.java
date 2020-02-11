@@ -63,7 +63,7 @@ public abstract class ConstrainedProblem extends TWayProblem
 
 	protected void generateGraph(PrintStream ps, boolean hypergraph) throws ExperimentException, IOException
 	{
-		File temp = File.createTempFile("temp-input", ".ncond");
+		File temp = File.createTempFile("temp-input-FOO", ".ncond");
 		PrintStream in_ps = new PrintStream(temp);
 		printQictDomains(in_ps);
 		generateQictConstraintString(in_ps);
@@ -77,14 +77,13 @@ public abstract class ConstrainedProblem extends TWayProblem
 		}
 		CommandRunner runner = new CommandRunner(command);
 		runner.run();
-		byte[] graph_contents = runner.getBytes();
-		if (graph_contents == null || graph_contents.length == 0)
+		String s_graph_contents = runner.getString();
+		if (s_graph_contents == null || s_graph_contents.isEmpty())
 		{
 			throw new ExperimentException("Error when generating the graph");
 		}
-		String s_graph_contents = new String(graph_contents);
 		ps.print(s_graph_contents);
-		temp.delete();
+		//temp.delete();
 	}
 
 	protected void printQictDomains(PrintStream ps)

@@ -18,21 +18,25 @@
  */
 package combigraph.lab.problems;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.lif.labpal.Experiment;
+import ca.uqac.lif.labpal.ExperimentException;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
+import combigraph.lab.experiments.TcasesTestGenerationExperiment;
 import combigraph.lab.experiments.TestingProblemExperiment;
 
 public class ForbiddenTuples extends UniversalProblem
 {
-	public static final transient String FRACTION_VARS = "Fraction of parameters";
+	public static final transient String FRACTION_VARS = "fp";
 
-	public static final transient String FRACTION_VALUES = "Fraction of values";
+	public static final transient String FRACTION_VALUES = "fv";
 
 	/**
 	 * The name of this problem
@@ -106,6 +110,10 @@ public class ForbiddenTuples extends UniversalProblem
 		{
 			extension = ".edn";
 		}
+		if (tool_name.compareTo(TcasesTestGenerationExperiment.NAME) == 0)
+		{
+			extension = ".tcases";
+		}
 		return TestingProblemExperiment.s_folder + tool_name + "-forbidden-" + m_t + "-" + m_v + "-" + m_n + "-" + m_fractionVars + "-" + m_fractionValues + extension;
 	}
 
@@ -121,6 +129,58 @@ public class ForbiddenTuples extends UniversalProblem
 				ps.println("Always !(" + p1 + "==" + v_i + " && " + p2  + " == 0)");
 			}
 		}
+	}
+	
+	@Override
+	public void generateFor(String tool_name, PrintStream ps) throws ExperimentException, IOException
+	{
+		if (tool_name.compareTo(TcasesTestGenerationExperiment.NAME) != 0)
+		{
+			// Defer to superclass for all but Tcases
+			super.generateFor(tool_name, ps);
+		}
+		ps.println("<System name=\"foo\">");
+		ps.println(" <Function name=\"test\">");
+		ps.println("  <Input>");
+		int highest_p = (int) (m_fractionVars * m_n);
+		int highest_v = (int) (m_fractionValues * m_v);
+		for (int n_i = 1; n_i <= m_n; n_i++)
+		{
+			ps.println("   <Var name=\"p" + n_i + "\">");
+			for (int v_i = 1; v_i <= m_v; v_i++)
+			{
+				ps.print("     <Value name=\"" + v_i + "\" ");
+				if (n_i < highest_p && v_i < highest_v)
+				{
+					String prop_name = "p" + n_i + "v" + v_i;
+					ps.print("property=\"" + prop_name + "\" ");
+				}
+				if (n_i > 0 && n_i <= highest_p && v_i == 0)
+				{
+					ps.print("whenNot=\"");
+					for (int vv_i = 0; vv_i < highest_v; vv_i++)
+					{
+						if (vv_i > 0)
+						{
+							ps.print(",");
+						}
+						String other_prop_name = "p" + (n_i - 1) + "v" + vv_i;
+						ps.print(other_prop_name);
+					}
+					ps.print("\" ");
+				}
+				ps.println("/>");
+			}
+			ps.println("   </Var>");
+		}
+		ps.println("  </Input>");
+		ps.println(" </Function>");
+		ps.println("</System>");
+		PrintStream ps_gen = new PrintStream(new File(TestingProblemExperiment.s_folder + "Tcases-t-" + m_t + ".xml"));
+		ps_gen.println("<Generators>");
+		ps_gen.println(" <TupleGenerator tuples=\"" + m_t + "\" />");
+		ps_gen.println("</Generators>");
+		ps_gen.close();
 	}
 	
 	public List<String> generateJennyWithoutParams()

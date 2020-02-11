@@ -18,7 +18,13 @@
  */
 package combigraph.lab.experiments;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ca.uqac.lif.mtnp.util.CommandRunner;
+import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
+import combigraph.lab.problems.TWayProblem;
 
 public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 {
@@ -26,6 +32,11 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 	 * Name of this particular tool
 	 */
 	public static final transient String NAME = "Tcases";
+	
+	/**
+	 * The regex pattern to look for in Tcases' output to count test cases
+	 */
+	protected static final transient Pattern s_pattern = Pattern.compile("<TestCase");
 	
 	public TcasesTestGenerationExperiment(CombinatorialTestingProblem problem)
 	{
@@ -35,15 +46,28 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 	@Override
 	protected String runTool() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (GraphLab.s_dryRun)
+		{
+			return "";
+		}
+		int t = ((TWayProblem) m_problem).getT();
+		String t_filename = TestGenerationExperiment.s_folder + "Tcases-t-" + t + ".xml";
+		String[] command = {"java", "-jar", "tcases.jar", "-g", t_filename, "-t", m_problem.getFilenameFor(NAME)};
+		CommandRunner runner = new CommandRunner(command);
+		runner.run();
+		return runner.getString();
 	}
 	
 	@Override
 	protected int getSize(String tool_output)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		Matcher mat = s_pattern.matcher(tool_output);
+		int size = 0;
+		while (mat.find())
+		{
+			size++;
+		}
+		return size;
 	}
 
 }

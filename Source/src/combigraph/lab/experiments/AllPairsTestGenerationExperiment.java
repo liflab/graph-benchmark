@@ -18,6 +18,7 @@
  */
 package combigraph.lab.experiments;
 
+import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
 public class AllPairsTestGenerationExperiment extends TestGenerationExperiment
@@ -35,7 +36,10 @@ public class AllPairsTestGenerationExperiment extends TestGenerationExperiment
 	@Override
 	protected String runTool() 
 	{
-		// TODO Auto-generated method stub
+		if (GraphLab.s_dryRun)
+		{
+			return "";
+		}
 		return null;
 	}
 	

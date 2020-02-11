@@ -18,6 +18,8 @@
  */
 package combigraph.lab.experiments;
 
+import ca.uqac.lif.mtnp.util.CommandRunner;
+import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
 public class HypergraphTestGenerationExperiment extends TestGenerationExperiment
@@ -35,15 +37,24 @@ public class HypergraphTestGenerationExperiment extends TestGenerationExperiment
 	@Override
 	protected String runTool() 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (GraphLab.s_dryRun)
+		{
+			return "";
+		}
+		CommandRunner runner = new CommandRunner(new String[] {"java", "-jar", "hitting-set-0.9.0-standalone.jar", m_problem.getFilenameFor(NAME)});
+		runner.run();
+		return runner.getString();
 	}
 	
 	@Override
 	protected int getSize(String tool_output)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (tool_output.startsWith("#"))
+		{
+			// Hitting set output
+			return tool_output.length() - tool_output.replaceAll(" ", "").length() + 1;
+		}
+		String[] lines = tool_output.split("\r\n|\r|\n");
+		return  lines.length;
 	}
-
 }
