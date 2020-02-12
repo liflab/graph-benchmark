@@ -26,6 +26,7 @@ import java.util.List;
 
 import ca.uqac.lif.labpal.Experiment;
 import ca.uqac.lif.labpal.ExperimentException;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
@@ -85,20 +86,21 @@ public class ForbiddenTuples extends UniversalProblem
 	{
 		if (tool_name.compareTo(HypergraphTestGenerationExperiment.NAME) == 0 || 
 				tool_name.compareTo(JennyTestGenerationExperiment.NAME) == 0 ||
+				tool_name.compareTo(ActsTestGenerationExperiment.NAME) == 0 ||
 				tool_name.compareTo(TcasesTestGenerationExperiment.NAME) == 0)
 		{
-			// Only hypergraph, Tcases and Jenny support forbidden tuples
+			// Only ACTS, hypergraph, Tcases and Jenny support forbidden tuples
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String getName()
 	{
 		return NAME;
 	}
-	
+
 	@Override
 	public String getFilenameFor(String tool_name)
 	{
@@ -131,15 +133,27 @@ public class ForbiddenTuples extends UniversalProblem
 			}
 		}
 	}
-	
+
 	@Override
 	public void generateFor(String tool_name, PrintStream ps) throws ExperimentException, IOException
 	{
-		if (tool_name.compareTo(TcasesTestGenerationExperiment.NAME) != 0)
+		switch (tool_name)
 		{
-			// Defer to superclass for all but Tcases
+		case TcasesTestGenerationExperiment.NAME:
+			generateForTcases(ps);
+			break;
+		case ActsTestGenerationExperiment.NAME:
+			generateForActs(ps);
+			break;
+		default:
+			// Defer to superclass for all but those above
 			super.generateFor(tool_name, ps);
+			break;
 		}
+	}
+
+	protected void generateForTcases(PrintStream ps) throws IOException
+	{
 		ps.println("<System name=\"foo\">");
 		ps.println(" <Function name=\"test\">");
 		ps.println("  <Input>");
@@ -183,7 +197,39 @@ public class ForbiddenTuples extends UniversalProblem
 		ps_gen.println("</Generators>");
 		ps_gen.close();
 	}
-	
+
+	protected void generateForActs(PrintStream ps)
+	{
+		ps.println("[System]");
+		ps.println("Name: foo");
+		ps.println();
+		ps.println("[Parameter]");
+		for (int n_i = 1; n_i <= m_n; n_i++)
+		{
+			ps.print("p" + n_i + " (int): ");
+			for (int v_i = 1; v_i <= m_v; v_i++)
+			{
+				if (v_i > 1)
+				{
+					ps.print(",");
+				}
+				ps.print(v_i);
+			}
+			ps.println();
+		}
+		ps.println();
+		ps.println("[Constraints]");
+		for (int n_i = 0; n_i < m_fractionVars * m_n; n_i++)
+		{
+			String p1 = "p" + (n_i + 1);
+			String p2 = "p" + (n_i + 2);
+			for (int v_i = 1; v_i < (m_fractionValues * m_v) + 1; v_i++)
+			{
+				ps.println(p1 + " != " + v_i + " || " + p2  + " != 1");
+			}
+		}
+	}
+
 	public List<String> generateJennyWithoutParams()
 	{
 		List<String> list = new ArrayList<String>();

@@ -32,17 +32,17 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 	 * Name of parameter "tool name"
 	 */
 	public static final transient String TOOL_NAME = "Tool";
-	
+
 	/**
 	 * Name of parameter "duration"
 	 */
 	public static final transient String DURATION = "Duration";
-	
+
 	/**
 	 * Name of parameter "test suite size"
 	 */
 	public static final transient String SIZE = "Size";
-	
+
 	public TestGenerationExperiment(CombinatorialTestingProblem problem, String tool_name)
 	{
 		super(problem);
@@ -51,27 +51,34 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 		describe(SIZE, "The number of test cases in the generated test suite");
 		setInput(TOOL_NAME, tool_name);
 	}
-	
+
 	@Override
 	public void execute() throws ExperimentException, InterruptedException
 	{
 		long time_start = System.currentTimeMillis();
-		String tool_output = runTool();
-		long time_end = System.currentTimeMillis();
-		if (tool_output == null || tool_output.isEmpty())
+		try
 		{
-			throw new ExperimentException("The tool did not produce any output");
+			String tool_output = runTool();
+			long time_end = System.currentTimeMillis();
+			if (tool_output == null || tool_output.isEmpty())
+			{
+				throw new ExperimentException("The tool did not produce any output");
+			}
+			write(DURATION, time_end - time_start);
+			write(SIZE, getSize(tool_output));
 		}
-		write(DURATION, time_end - time_start);
-		write(SIZE, getSize(tool_output));
+		catch (IOException e)
+		{
+			throw new ExperimentException(e);
+		}
 	}
-	
+
 	@Override
 	public boolean prerequisitesFulfilled()
 	{
 		return FileHelper.fileExists(m_problem.getFilenameFor(readString(TOOL_NAME)));
 	}
-	
+
 	@Override
 	public void fulfillPrerequisites() throws ExperimentException
 	{
@@ -89,12 +96,13 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 			throw new ExperimentException(e);
 		}
 	}
-	
+
 	/**
 	 * Runs the tool on the associated problem
 	 * @return The output of the tool at the standard output
+	 * @throws IOException If something "goes bad" when running the tool
 	 */
-	protected abstract String runTool();
+	protected abstract String runTool() throws IOException;
 
 	/**
 	 * Gets the number of test cases from the tool's output

@@ -31,6 +31,7 @@ import ca.uqac.lif.mtnp.plot.gnuplot.Scatterplot;
 import ca.uqac.lif.mtnp.table.ExpandAsColumns;
 import ca.uqac.lif.mtnp.table.TransformedTable;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
@@ -120,7 +121,8 @@ public class GraphLab extends Laboratory
 		big_r.addRange(T, t_min, t_max);
 		big_r.addRange(V, v_min, v_max);
 		big_r.addRange(N, n_min, n_max);
-		big_r.add(TOOL_NAME, 
+		big_r.add(TOOL_NAME,
+				ActsTestGenerationExperiment.NAME,
 				AllPairsTestGenerationExperiment.NAME,
 				JennyTestGenerationExperiment.NAME,
 				TcasesTestGenerationExperiment.NAME,

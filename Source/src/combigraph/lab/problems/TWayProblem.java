@@ -28,6 +28,7 @@ import ca.uqac.lif.labpal.Experiment;
 import ca.uqac.lif.labpal.ExperimentException;
 import ca.uqac.lif.testing.tway.DotGraphGenerator;
 import ca.uqac.lif.testing.tway.EdnGenerator;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
@@ -186,6 +187,27 @@ public class TWayProblem extends CombinatorialTestingProblem
 			}
 			break;
 		}
+		case ActsTestGenerationExperiment.NAME:
+		{
+			ps.println("[System]");
+			ps.println("Name: foo");
+			ps.println();
+			ps.println("[Parameter]");
+			for (int n_i = 1; n_i <= m_n; n_i++)
+			{
+				ps.print("p" + n_i + " (int): ");
+				for (int v_i = 1; v_i <= m_v; v_i++)
+				{
+					if (v_i > 1)
+					{
+						ps.print(",");
+					}
+					ps.print(v_i);
+				}
+				ps.println();
+			}
+			break;
+		}
 		case AllPairsTestGenerationExperiment.NAME:
 		{
 			break;
@@ -225,7 +247,6 @@ public class TWayProblem extends CombinatorialTestingProblem
 			extension = ".xml";
 			break;
 		}
-		
 		return TestingProblemExperiment.s_folder + tool_name + "-comb-" + m_t + "-" + m_v + "-" + m_n + extension;
 	}
 

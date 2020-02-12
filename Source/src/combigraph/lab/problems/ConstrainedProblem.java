@@ -83,7 +83,7 @@ public abstract class ConstrainedProblem extends TWayProblem
 			throw new ExperimentException("Error when generating the graph");
 		}
 		ps.print(s_graph_contents);
-		//temp.delete();
+		temp.delete();
 	}
 
 	protected void printQictDomains(PrintStream ps)

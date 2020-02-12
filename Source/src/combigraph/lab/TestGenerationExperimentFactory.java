@@ -21,6 +21,7 @@ package combigraph.lab;
 import ca.uqac.lif.json.JsonNumber;
 import ca.uqac.lif.labpal.ExperimentFactory;
 import ca.uqac.lif.labpal.Region;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
@@ -73,12 +74,22 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		{
 			return new TcasesTestGenerationExperiment(problem);
 		}
+		case ActsTestGenerationExperiment.NAME:
+		{
+			return new ActsTestGenerationExperiment(problem);
+		}
 		case AllPairsTestGenerationExperiment.NAME:
+		{
 			return new AllPairsTestGenerationExperiment(problem);
+		}
 		case ColoringTestGenerationExperiment.NAME:
+		{
 			return new ColoringTestGenerationExperiment(problem);
+		}
 		case HypergraphTestGenerationExperiment.NAME:
+		{
 			return new HypergraphTestGenerationExperiment(problem);
+		}
 		}
 		return null;
 	}
