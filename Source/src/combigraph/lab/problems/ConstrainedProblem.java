@@ -24,6 +24,7 @@ import java.io.PrintStream;
 
 import ca.uqac.lif.labpal.CommandRunner;
 import ca.uqac.lif.labpal.ExperimentException;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 
@@ -58,6 +59,26 @@ public abstract class ConstrainedProblem extends TWayProblem
 			generateGraph(ps, true);
 			break;
 		}
+		case ActsTestGenerationExperiment.NAME:
+			ps.println("[System]");
+			ps.println("Name: foo");
+			ps.println();
+			ps.println("[Parameter]");
+			for (int n_i = 1; n_i <= m_n; n_i++)
+			{
+				ps.print("p" + n_i + " (int): ");
+				for (int v_i = 1; v_i <= m_v; v_i++)
+				{
+					if (v_i > 1)
+					{
+						ps.print(",");
+					}
+					ps.print(v_i);
+				}
+				ps.println();
+			}
+			generateActsConstraintString(ps);
+			break;
 		}
 	}
 
@@ -86,6 +107,10 @@ public abstract class ConstrainedProblem extends TWayProblem
 		temp.delete();
 	}
 
+	/**
+	 * Prints the domains for each parameter using the QICT file syntax
+	 * @param ps The print stream where to print these domains
+	 */
 	protected void printQictDomains(PrintStream ps)
 	{
 		for (int n_i = 0; n_i < m_n; n_i++)
@@ -103,5 +128,17 @@ public abstract class ConstrainedProblem extends TWayProblem
 		}
 	}
 
+	/**
+	 * Prints the set of constraints for this problem using the extended
+	 * QICT file syntax format
+	 * @param ps The print stream where to print these constraints
+	 */
 	protected abstract void generateQictConstraintString(PrintStream ps);
+	
+	/**
+	 * Prints the set of constraints for this problem using the extended
+	 * ACTS file syntax format
+	 * @param ps The print stream where to print these constraints
+	 */
+	protected abstract void generateActsConstraintString(PrintStream ps);
 }

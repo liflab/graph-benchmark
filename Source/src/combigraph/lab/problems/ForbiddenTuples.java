@@ -133,6 +133,22 @@ public class ForbiddenTuples extends UniversalProblem
 			}
 		}
 	}
+	
+	@Override
+	protected void generateActsConstraintString(PrintStream ps)
+	{
+		ps.println();
+		ps.println("[Constraints]");
+		for (int n_i = 0; n_i < m_fractionVars * m_n; n_i++)
+		{
+			String p1 = "p" + (n_i + 1);
+			String p2 = "p" + (n_i + 2);
+			for (int v_i = 1; v_i < (m_fractionValues * m_v) + 1; v_i++)
+			{
+				ps.println(p1 + " != " + v_i + " || " + p2  + " != 1");
+			}
+		}
+	}
 
 	@Override
 	public void generateFor(String tool_name, PrintStream ps) throws ExperimentException, IOException
@@ -141,9 +157,6 @@ public class ForbiddenTuples extends UniversalProblem
 		{
 		case TcasesTestGenerationExperiment.NAME:
 			generateForTcases(ps);
-			break;
-		case ActsTestGenerationExperiment.NAME:
-			generateForActs(ps);
 			break;
 		default:
 			// Defer to superclass for all but those above
@@ -196,38 +209,6 @@ public class ForbiddenTuples extends UniversalProblem
 		ps_gen.println(" <TupleGenerator tuples=\"" + m_t + "\" />");
 		ps_gen.println("</Generators>");
 		ps_gen.close();
-	}
-
-	protected void generateForActs(PrintStream ps)
-	{
-		ps.println("[System]");
-		ps.println("Name: foo");
-		ps.println();
-		ps.println("[Parameter]");
-		for (int n_i = 1; n_i <= m_n; n_i++)
-		{
-			ps.print("p" + n_i + " (int): ");
-			for (int v_i = 1; v_i <= m_v; v_i++)
-			{
-				if (v_i > 1)
-				{
-					ps.print(",");
-				}
-				ps.print(v_i);
-			}
-			ps.println();
-		}
-		ps.println();
-		ps.println("[Constraints]");
-		for (int n_i = 0; n_i < m_fractionVars * m_n; n_i++)
-		{
-			String p1 = "p" + (n_i + 1);
-			String p2 = "p" + (n_i + 2);
-			for (int v_i = 1; v_i < (m_fractionValues * m_v) + 1; v_i++)
-			{
-				ps.println(p1 + " != " + v_i + " || " + p2  + " != 1");
-			}
-		}
 	}
 
 	public List<String> generateJennyWithoutParams()
