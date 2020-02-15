@@ -26,6 +26,7 @@ import java.util.List;
 
 import ca.uqac.lif.labpal.Experiment;
 import ca.uqac.lif.labpal.ExperimentException;
+import ca.uqac.lif.labpal.Random;
 import ca.uqac.lif.testing.tway.DotGraphGenerator;
 import ca.uqac.lif.testing.tway.EdnGenerator;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
@@ -78,13 +79,14 @@ public class TWayProblem extends CombinatorialTestingProblem
 
 	/**
 	 * Creates a new instance of the t-way problem
+	 * @param random A random number generator
 	 * @param t Interaction strength
 	 * @param v Domain size
 	 * @param n Number of parameters
 	 */
-	public TWayProblem(int t, int v, int n)
+	public TWayProblem(Random random, int t, int v, int n)
 	{
-		super();
+		super(random);
 		m_t = t;
 		m_v = v;
 		m_n = n;
@@ -213,6 +215,12 @@ public class TWayProblem extends CombinatorialTestingProblem
 			break;
 		}
 		}
+	}
+	
+	@Override
+	public void cleanFor(String tool_name)
+	{
+		// Do nothing
 	}
 
 	@Override

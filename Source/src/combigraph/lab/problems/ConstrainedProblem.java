@@ -24,9 +24,10 @@ import java.io.PrintStream;
 
 import ca.uqac.lif.labpal.CommandRunner;
 import ca.uqac.lif.labpal.ExperimentException;
-import combigraph.lab.experiments.ActsTestGenerationExperiment;
+import ca.uqac.lif.labpal.Random;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
+import combigraph.lab.experiments.JennyTestGenerationExperiment;
 
 /**
  * Classical "t-way" problem, to which extra constraints are added
@@ -35,13 +36,14 @@ public abstract class ConstrainedProblem extends TWayProblem
 {
 	/**
 	 * Creates a new generic instance of a constrained t-way problem
+	 * @param random A random number generator
 	 * @param t Interaction strength
 	 * @param v Domain size
 	 * @param n Number of parameters
 	 */
-	public ConstrainedProblem(int t, int v, int n)
+	public ConstrainedProblem(Random random, int t, int v, int n)
 	{
-		super(t, v, n);
+		super(random, t, v, n);
 	}
 
 	@Override
@@ -59,25 +61,8 @@ public abstract class ConstrainedProblem extends TWayProblem
 			generateGraph(ps, true);
 			break;
 		}
-		case ActsTestGenerationExperiment.NAME:
-			ps.println("[System]");
-			ps.println("Name: foo");
-			ps.println();
-			ps.println("[Parameter]");
-			for (int n_i = 1; n_i <= m_n; n_i++)
-			{
-				ps.print("p" + n_i + " (int): ");
-				for (int v_i = 1; v_i <= m_v; v_i++)
-				{
-					if (v_i > 1)
-					{
-						ps.print(",");
-					}
-					ps.print(v_i);
-				}
-				ps.println();
-			}
-			generateActsConstraintString(ps);
+		default:
+			// Nothing to do: unsupported
 			break;
 		}
 	}
@@ -135,10 +120,30 @@ public abstract class ConstrainedProblem extends TWayProblem
 	 */
 	protected abstract void generateQictConstraintString(PrintStream ps);
 	
-	/**
-	 * Prints the set of constraints for this problem using the extended
-	 * ACTS file syntax format
-	 * @param ps The print stream where to print these constraints
-	 */
-	protected abstract void generateActsConstraintString(PrintStream ps);
+	protected boolean increment(int[] values)
+	{
+		for (int i = 0; i < m_n; i++)
+		{
+			values[i]++;
+			if (values[i] < m_v)
+			{
+				return true;
+			}
+			else
+			{
+				values[i] = 0;
+			}
+		}
+		return false;
+	}
+	
+	protected String writeJennyParameter(int[] values)
+	{
+		String w = "-w";
+		for (int n_i = 0; n_i < values.length; n_i++)
+		{
+			w += (n_i + 1) + JennyTestGenerationExperiment.FEATURES[values[n_i]];
+		}
+		return w;
+	}
 }

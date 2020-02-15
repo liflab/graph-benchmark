@@ -23,6 +23,7 @@ import ca.uqac.lif.labpal.FileHelper;
 import ca.uqac.lif.labpal.Group;
 import ca.uqac.lif.labpal.Laboratory;
 import ca.uqac.lif.labpal.LatexNamer;
+import ca.uqac.lif.labpal.Random;
 import ca.uqac.lif.labpal.Region;
 import ca.uqac.lif.labpal.TitleNamer;
 import ca.uqac.lif.labpal.table.ExperimentTable;
@@ -40,6 +41,7 @@ import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.experiments.TestingProblemExperiment;
 import combigraph.lab.experiments.VPTagTestGenerationExperiment;
 import combigraph.lab.problems.ForbiddenTuples;
+import combigraph.lab.problems.IncreasingValues;
 import combigraph.lab.problems.TWayProblem;
 
 import static combigraph.lab.experiments.TestGenerationExperiment.DURATION;
@@ -58,7 +60,7 @@ public class GraphLab extends Laboratory
 	 * If set to true, the tols for solving the problems will not be run
 	 */
 	public static boolean s_dryRun = false;
-	
+
 	/**
 	 * Lower bound for parameter <i>t</i> in the experiments
 	 */
@@ -88,12 +90,12 @@ public class GraphLab extends Laboratory
 	 * Upper bound for parameter <i>n</i> in the experiments
 	 */
 	public static int n_max = 20;
-	
+
 	/**
 	 * A name for LaTeX tables and figures
 	 */
 	LatexNamer m_latexNamer = new LatexNamer();
-	
+
 	/**
 	 * A title for tables and figures
 	 */
@@ -103,15 +105,15 @@ public class GraphLab extends Laboratory
 	public void setup()
 	{
 		// Default parameters
-		boolean with_t_way = false, with_forbidden_tuples = true;
-		
+		boolean with_t_way = false, with_forbidden_tuples = false, with_increasing_values = true;
+
 		// Setup the lab's factory
-		TestGenerationExperimentFactory factory = new TestGenerationExperimentFactory(this);
+		TestGenerationExperimentFactory factory = new TestGenerationExperimentFactory(this, getRandom());
 
 		// Create the data folder if it does not exist
 		File data_folder = new File(TestingProblemExperiment.s_folder);
 		data_folder.mkdir();
-		
+
 		t_max = 3;
 		v_max = 5;
 		n_max = 6;
@@ -160,6 +162,53 @@ public class GraphLab extends Laboratory
 			}
 		}
 
+		// Universal constraints: increasing values
+		if (with_increasing_values)
+		{
+			TWayRegion twr = new TWayRegion(big_r);
+			twr.add(TESTING_PROBLEM_NAME, IncreasingValues.NAME);
+			Group g = new Group("Universal constraints: increasing values");
+			add(g);
+			{
+				// Fixing n and v, varying t
+				for (Region out_r : twr.all(N, V))
+				{
+					boolean added = false;
+					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, T, SIZE);
+					et_size.setShowInList(false);
+					TransformedTable tt_size = new TransformedTable(new ExpandAsColumns(TOOL_NAME, SIZE), et_size);
+					m_titleNamer.setTitle(tt_size, out_r, "Increasing values ", " for size");
+					Scatterplot p_size = new Scatterplot(tt_size);
+					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, T, DURATION);
+					et_duration.setShowInList(false);
+					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_duration);
+					m_titleNamer.setTitle(tt_duration, out_r, "Increasing values ", " for duration");
+					Scatterplot p_duration = new Scatterplot(tt_duration);
+					for (Region in_r : out_r.all(T, TOOL_NAME))
+					{
+						TestGenerationExperiment exp = factory.get(in_r);
+						if (exp == null)
+						{
+							continue;
+						}
+						else
+						{
+							added = true;
+						}
+						et_size.add(exp);
+						et_duration.add(exp);
+						g.add(exp);
+					}
+					if (added)
+					{
+						add(et_size, tt_size);
+						add(et_duration, tt_duration);
+						add(p_size, p_duration);
+					}
+				}
+			}
+		}
+
 		// Forbidden tuples
 		if (with_forbidden_tuples)
 		{
@@ -168,7 +217,7 @@ public class GraphLab extends Laboratory
 			twr.add(TESTING_PROBLEM_NAME, ForbiddenTuples.NAME);
 			twr.add(ForbiddenTuples.FRACTION_VALUES, 0, 0.1, 0.2, 0.5);
 			twr.add(ForbiddenTuples.FRACTION_VARS, 0, 0.1, 0.2, 0.5);
-			Group g = new Group("Forbidden tuples");
+			Group g = new Group("Universal constraints: forbidden tuples");
 			add(g);
 			{
 				// Fixing n and v, and t, varying the fraction

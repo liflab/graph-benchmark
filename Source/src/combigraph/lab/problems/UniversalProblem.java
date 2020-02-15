@@ -18,6 +18,13 @@
  */
 package combigraph.lab.problems;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.List;
+
+import ca.uqac.lif.labpal.ExperimentException;
+import ca.uqac.lif.labpal.Random;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 
 /**
@@ -27,13 +34,14 @@ public abstract class UniversalProblem extends ConstrainedProblem
 {
 	/**
 	 * Creates a new generic instance of a universal t-way problem
+	 * @param random A random number generator
 	 * @param t Interaction strength
 	 * @param v Domain size
 	 * @param n Number of parameters
 	 */
-	public UniversalProblem(int t, int v, int n)
+	public UniversalProblem(Random random, int t, int v, int n)
 	{
-		super(t, v, n);
+		super(random, t, v, n);
 	}
 	
 	@Override
@@ -46,4 +54,48 @@ public abstract class UniversalProblem extends ConstrainedProblem
 		}
 		return super.supportedBy(tool_name);
 	}
+	
+	@Override
+	public void generateFor(String tool_name, PrintStream ps) throws ExperimentException, IOException
+	{
+		switch (tool_name)
+		{
+		case ActsTestGenerationExperiment.NAME:
+			ps.println("[System]");
+			ps.println("Name: foo");
+			ps.println();
+			ps.println("[Parameter]");
+			for (int n_i = 1; n_i <= m_n; n_i++)
+			{
+				ps.print("p" + n_i + " (int): ");
+				for (int v_i = 1; v_i <= m_v; v_i++)
+				{
+					if (v_i > 1)
+					{
+						ps.print(",");
+					}
+					ps.print(v_i);
+				}
+				ps.println();
+			}
+			generateActsConstraintString(ps);
+			break;
+		default:
+			super.generateFor(tool_name, ps);
+			break;
+		}
+	}
+	
+	/**
+	 * Generates the "without" command line parameters for Jenny
+	 * @return The list of forbidden tuples
+	 */
+	public abstract List<String> generateJennyWithoutParams();
+	
+	/**
+	 * Prints the set of constraints for this problem using the extended
+	 * ACTS file syntax format
+	 * @param ps The print stream where to print these constraints
+	 */
+	protected abstract void generateActsConstraintString(PrintStream ps);
 }

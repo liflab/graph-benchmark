@@ -18,18 +18,19 @@
  */
 package combigraph.lab.experiments;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import combigraph.lab.problems.UniversalProblem;
+import combigraph.lab.problems.ExistentialProblem;
 
 /**
- * A special case of Jenny experiment for the {@link ForbiddenTuples} test
- * generation problem. A particular experiment is needed, since the forbidden
- * tuples modify the basic command line syntax used to call the tool. 
+ * A special case of Jenny experiment for the {@link TestSuiteCompletion} test
+ * generation problem. A particular experiment is needed, since test suite
+ * completion modifies the basic command line syntax used to call the tool. 
  */
-public class JennyForbiddenTuplesExperiment extends JennyTestGenerationExperiment 
+public class JennyTestCompletionExperiment extends JennyTestGenerationExperiment 
 {
-	public JennyForbiddenTuplesExperiment(UniversalProblem problem) 
+	public JennyTestCompletionExperiment(ExistentialProblem problem) 
 	{
 		super(problem);
 	}
@@ -37,7 +38,8 @@ public class JennyForbiddenTuplesExperiment extends JennyTestGenerationExperimen
 	@Override
 	protected List<String> getAdditionalParameters()
 	{
-		return ((UniversalProblem) m_problem).generateJennyWithoutParams();
+		List<String> out = new ArrayList<String>(1);
+		out.add(((ExistentialProblem) m_problem).getJennySeedFilename());
+		return out;
 	}
-
 }

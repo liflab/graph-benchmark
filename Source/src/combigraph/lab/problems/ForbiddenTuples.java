@@ -26,6 +26,7 @@ import java.util.List;
 
 import ca.uqac.lif.labpal.Experiment;
 import ca.uqac.lif.labpal.ExperimentException;
+import ca.uqac.lif.labpal.Random;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
@@ -57,6 +58,7 @@ public class ForbiddenTuples extends UniversalProblem
 	/**
 	 * Creates a new instance of the t-way test case generation with 
 	 * forbidden tuples
+	 * @param random A random number generator
 	 * @param t Interaction strength
 	 * @param v Domain size
 	 * @param n Number of parameters
@@ -64,9 +66,9 @@ public class ForbiddenTuples extends UniversalProblem
 	 * @param fraction_values The fraction of values for each parameter having a 
 	 * forbidden relationship
 	 */
-	public ForbiddenTuples(int t, int v, int n, float fraction_vars, float fraction_values) 
+	public ForbiddenTuples(Random random, int t, int v, int n, float fraction_vars, float fraction_values) 
 	{
-		super(t, v, n);
+		super(random, t, v, n);
 		m_fractionVars = fraction_vars;
 		m_fractionValues = fraction_values;
 	}
@@ -211,6 +213,7 @@ public class ForbiddenTuples extends UniversalProblem
 		ps_gen.close();
 	}
 
+	@Override
 	public List<String> generateJennyWithoutParams()
 	{
 		List<String> list = new ArrayList<String>();

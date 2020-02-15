@@ -96,6 +96,15 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 			throw new ExperimentException(e);
 		}
 	}
+	
+	@Override
+	public void cleanPrerequisites()
+	{
+		String tool_name = readString(TOOL_NAME);
+		File f = new File(m_problem.getFilenameFor(tool_name));
+		f.delete();
+		m_problem.cleanFor(tool_name);
+	}
 
 	/**
 	 * Runs the tool on the associated problem

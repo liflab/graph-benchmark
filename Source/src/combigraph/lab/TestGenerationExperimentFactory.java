@@ -20,18 +20,24 @@ package combigraph.lab;
 
 import ca.uqac.lif.json.JsonNumber;
 import ca.uqac.lif.labpal.ExperimentFactory;
+import ca.uqac.lif.labpal.Random;
 import ca.uqac.lif.labpal.Region;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyForbiddenTuplesExperiment;
+import combigraph.lab.experiments.JennyTestCompletionExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TcasesTestGenerationExperiment;
 import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.problems.CombinatorialTestingProblem;
+import combigraph.lab.problems.ExistentialProblem;
 import combigraph.lab.problems.ForbiddenTuples;
+import combigraph.lab.problems.IncreasingValues;
 import combigraph.lab.problems.TWayProblem;
+import combigraph.lab.problems.TestSuiteCompletion;
+import combigraph.lab.problems.UniversalProblem;
 
 import static combigraph.lab.experiments.TestGenerationExperiment.TOOL_NAME;
 import static combigraph.lab.problems.CombinatorialTestingProblem.TESTING_PROBLEM_NAME;
@@ -41,9 +47,15 @@ import static combigraph.lab.problems.TWayProblem.V;
 
 public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,TestGenerationExperiment>
 {
-	public TestGenerationExperimentFactory(GraphLab lab)
+	/**
+	 * A random number generator
+	 */
+	protected transient Random m_random;
+	
+	public TestGenerationExperimentFactory(GraphLab lab, Random random)
 	{
 		super(lab, TestGenerationExperiment.class);
+		m_random = random;
 	}
 
 	@Override
@@ -64,9 +76,13 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		{
 		case JennyTestGenerationExperiment.NAME:
 		{
-			if (problem instanceof ForbiddenTuples)
+			if (problem instanceof UniversalProblem)
 			{
-				return new JennyForbiddenTuplesExperiment((ForbiddenTuples) problem);
+				return new JennyForbiddenTuplesExperiment((UniversalProblem) problem);
+			}
+			if (problem instanceof ExistentialProblem)
+			{
+				return new JennyTestCompletionExperiment((ExistentialProblem) problem);
 			}
 			return new JennyTestGenerationExperiment(problem);
 		}
@@ -94,16 +110,27 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		return null;
 	}
 
-	protected static CombinatorialTestingProblem getProblem(String prob_name, Region r)
+	protected CombinatorialTestingProblem getProblem(String prob_name, Region r)
 	{
 		switch (prob_name)
 		{
 		case TWayProblem.NAME:
-			return new TWayProblem(r.getInt(T), r.getInt(V), r.getInt(N));
+			return new TWayProblem(m_random, r.getInt(T), r.getInt(V), r.getInt(N));
+		case IncreasingValues.NAME:
+		{
+			if (r.getInt(N) > r.getInt(V)) // Impossible for this problem
+			{
+				return null;
+			}
+			return new IncreasingValues(m_random, r.getInt(T), r.getInt(V), r.getInt(N));
+		}
 		case ForbiddenTuples.NAME:
-			return new ForbiddenTuples(r.getInt(T), r.getInt(V), r.getInt(N),
+			return new ForbiddenTuples(m_random, r.getInt(T), r.getInt(V), r.getInt(N),
 					((JsonNumber) r.get(ForbiddenTuples.FRACTION_VARS)).numberValue().floatValue(),
 					((JsonNumber) r.get(ForbiddenTuples.FRACTION_VALUES)).numberValue().floatValue());
+		case TestSuiteCompletion.NAME:
+			return new TestSuiteCompletion(m_random, r.getInt(T), r.getInt(V), r.getInt(N),
+					((JsonNumber) r.get(TestSuiteCompletion.NUM_TESTS)).numberValue().intValue());
 		default:
 			return null;
 		}
