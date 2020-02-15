@@ -43,6 +43,7 @@ import combigraph.lab.experiments.VPTagTestGenerationExperiment;
 import combigraph.lab.problems.ForbiddenTuples;
 import combigraph.lab.problems.IncreasingValues;
 import combigraph.lab.problems.TWayProblem;
+import combigraph.lab.problems.TestSuiteCompletion;
 
 import static combigraph.lab.experiments.TestGenerationExperiment.DURATION;
 import static combigraph.lab.experiments.TestGenerationExperiment.SIZE;
@@ -105,7 +106,10 @@ public class GraphLab extends Laboratory
 	public void setup()
 	{
 		// Default parameters
-		boolean with_t_way = false, with_forbidden_tuples = false, with_increasing_values = true;
+		boolean with_t_way = false, 
+				with_forbidden_tuples = false, 
+				with_increasing_values = false,
+				with_test_suite_completion = true;
 
 		// Setup the lab's factory
 		TestGenerationExperimentFactory factory = new TestGenerationExperimentFactory(this, getRandom());
@@ -249,6 +253,54 @@ public class GraphLab extends Laboratory
 							// frac_vars and frac_vals
 							continue;
 						}
+						TestGenerationExperiment exp = factory.get(in_r);
+						if (exp == null)
+						{
+							continue;
+						}
+						et_size.add(exp);
+						et_duration.add(exp);
+						g.add(exp);
+					}
+					add(et_size, tt_size);
+					add(p_size);
+					add(et_duration, tt_duration);
+					add(p_duration);
+				}
+			}
+		}
+
+		// Test suite completion
+		if (with_test_suite_completion)
+		{
+			TWayRegion twr = new TWayRegion(big_r);
+			//twr.addRange(N, n_min, n_max / 2);
+			twr.add(TESTING_PROBLEM_NAME, TestSuiteCompletion.NAME);
+			twr.addRange(TestSuiteCompletion.NUM_TESTS, 0, 50, 10);
+			Group g = new Group("Existential constraints: test suite completion");
+			add(g);
+			{
+				// Fixing n and v, and t, varying the number of tests
+				for (Region out_r : twr.all(N, V, T))
+				{
+					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, TestSuiteCompletion.NUM_TESTS, SIZE);
+					et_size.setShowInList(false);
+					TransformedTable tt_size = new TransformedTable(new ExpandAsColumns(TOOL_NAME, SIZE), et_size);
+					m_titleNamer.setTitle(tt_size, out_r, "Test suite completion ", " for size");
+					Scatterplot p_size = new Scatterplot(tt_size);
+					p_size.setTitle(tt_size.getTitle());
+					p_size.setCaption(Axis.X, "Number of pre-existing tests");
+					p_size.setCaption(Axis.Y, "Size");
+					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, TestSuiteCompletion.NUM_TESTS, DURATION);
+					et_duration.setShowInList(false);
+					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_duration);
+					m_titleNamer.setTitle(tt_duration, out_r, "Test suite completion ", " for duration");
+					Scatterplot p_duration = new Scatterplot(tt_duration);
+					p_duration.setTitle(tt_duration.getTitle());
+					p_duration.setCaption(Axis.X, "Number of pre-existing tests");
+					p_duration.setCaption(Axis.Y, "Duration");
+					for (Region in_r : out_r.all(TOOL_NAME, TestSuiteCompletion.NUM_TESTS))
+					{
 						TestGenerationExperiment exp = factory.get(in_r);
 						if (exp == null)
 						{

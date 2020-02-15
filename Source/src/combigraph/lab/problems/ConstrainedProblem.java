@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import ca.uqac.lif.labpal.CommandRunner;
 import ca.uqac.lif.labpal.ExperimentException;
 import ca.uqac.lif.labpal.Random;
+import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
@@ -59,6 +60,12 @@ public abstract class ConstrainedProblem extends TWayProblem
 		case HypergraphTestGenerationExperiment.NAME:
 		{
 			generateGraph(ps, true);
+			break;
+		}
+		case ActsTestGenerationExperiment.NAME:
+		{
+			super.generateFor(ActsTestGenerationExperiment.NAME, ps);
+			generateActsConstraintString(ps);
 			break;
 		}
 		default:
@@ -119,6 +126,13 @@ public abstract class ConstrainedProblem extends TWayProblem
 	 * @param ps The print stream where to print these constraints
 	 */
 	protected abstract void generateQictConstraintString(PrintStream ps);
+	
+	/**
+	 * Prints the set of constraints for this problem using the extended
+	 * ACTS file syntax format
+	 * @param ps The print stream where to print these constraints
+	 */
+	protected abstract void generateActsConstraintString(PrintStream ps);
 	
 	protected boolean increment(int[] values)
 	{

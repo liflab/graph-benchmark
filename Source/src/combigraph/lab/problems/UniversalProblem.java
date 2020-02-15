@@ -91,11 +91,4 @@ public abstract class UniversalProblem extends ConstrainedProblem
 	 * @return The list of forbidden tuples
 	 */
 	public abstract List<String> generateJennyWithoutParams();
-	
-	/**
-	 * Prints the set of constraints for this problem using the extended
-	 * ACTS file syntax format
-	 * @param ps The print stream where to print these constraints
-	 */
-	protected abstract void generateActsConstraintString(PrintStream ps);
 }

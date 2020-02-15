@@ -18,9 +18,10 @@
  */
 package combigraph.lab.problems;
 
+import java.io.PrintStream;
+
 import ca.uqac.lif.labpal.Random;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
-import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.experiments.TestingProblemExperiment;
 
 /**
@@ -54,5 +55,10 @@ public abstract class ExistentialProblem extends ConstrainedProblem
 	public String getJennySeedFilename()
 	{
 		return TestingProblemExperiment.s_folder + "Jenny-completion-" + m_t + "-" + m_v + "-" + m_n + "-seed.txt";
+	}
+	
+	public void writeJennySeedFile(PrintStream ps)
+	{
+		// Do nothing
 	}
 }

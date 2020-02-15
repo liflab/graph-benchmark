@@ -18,9 +18,16 @@
  */
 package combigraph.lab.experiments;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.uqac.lif.labpal.ExperimentException;
+import ca.uqac.lif.mtnp.util.FileHelper;
 import combigraph.lab.problems.ExistentialProblem;
 
 /**
@@ -39,7 +46,35 @@ public class JennyTestCompletionExperiment extends JennyTestGenerationExperiment
 	protected List<String> getAdditionalParameters()
 	{
 		List<String> out = new ArrayList<String>(1);
-		out.add(((ExistentialProblem) m_problem).getJennySeedFilename());
+		out.add("-o" + ((ExistentialProblem) m_problem).getJennySeedFilename());
 		return out;
+	}
+	
+	@Override
+	public boolean prerequisitesFulfilled()
+	{
+		if (!super.prerequisitesFulfilled())
+		{
+			return false;
+		}
+		String seed_filename = ((ExistentialProblem) m_problem).getJennySeedFilename();
+		return FileHelper.fileExists(seed_filename);
+	}
+	
+	@Override
+	public void fulfillPrerequisites() throws ExperimentException
+	{
+		String seed_filename = ((ExistentialProblem) m_problem).getJennySeedFilename();
+		File f = new File(seed_filename);
+		try
+		{
+			PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(f)));
+			((ExistentialProblem) m_problem).writeJennySeedFile(ps);
+			ps.close();
+		}
+		catch (IOException e)
+		{
+			throw new ExperimentException(e);
+		}
 	}
 }

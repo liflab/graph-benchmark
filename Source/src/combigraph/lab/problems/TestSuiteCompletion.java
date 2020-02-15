@@ -76,7 +76,8 @@ public class TestSuiteCompletion extends ExistentialProblem
 		if (tool_name.compareTo(HypergraphTestGenerationExperiment.NAME) == 0 ||
 				tool_name.compareTo(ColoringTestGenerationExperiment.NAME) == 0 ||
 				tool_name.compareTo(JennyTestGenerationExperiment.NAME) == 0 ||
-				tool_name.compareTo(ActsTestGenerationExperiment.NAME) == 0)
+				tool_name.compareTo(ActsTestGenerationExperiment.NAME) == 0
+				)
 		{
 			// Only ACTS, hypergraph, coloring and Jenny support test suite completion
 			return true;
@@ -167,6 +168,34 @@ public class TestSuiteCompletion extends ExistentialProblem
 				}
 				ps.print("p" + i + " = " + test[i]);
 			}
+		}
+	}
+	
+	@Override
+	protected void generateActsConstraintString(PrintStream ps)
+	{
+		ps.println();
+		ps.println("[Test Set]");
+		for (int i = 0; i < m_n; i++)
+		{
+			if (i > 0)
+			{
+				ps.print(",");
+			}
+			ps.print("p" + (i + 1));
+		}
+		ps.println();
+		for (int[] test : m_tests)
+		{
+			for (int i = 0; i < test.length; i++)
+			{
+				if (i > 0)
+				{
+					ps.print(",");
+				}
+				ps.print(test[i] + 1);
+			}
+			ps.println();
 		}
 	}
 }
