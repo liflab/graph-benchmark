@@ -110,6 +110,10 @@ public class TestSuiteCompletion extends ExistentialProblem
 	public void fillExperiment(Experiment e)
 	{
 		super.fillExperiment(e);
+		e.setDescription("In this experiment, the problem is to generate a combinatorial "
+				+ "test suite for given values of t, n and v, with the added constraint that "
+				+ "an existing list of test cases must be included in the result. The tool "
+				+ "must therefore complete this partial test suite in the best possible way.");
 		e.describe(NUM_TESTS, "Number of tests already present in the test suite");
 		e.setInput(NUM_TESTS, m_numTests);
 	}
@@ -168,6 +172,7 @@ public class TestSuiteCompletion extends ExistentialProblem
 				}
 				ps.print("p" + i + " = " + test[i]);
 			}
+			ps.println();
 		}
 	}
 	

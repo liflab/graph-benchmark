@@ -18,6 +18,11 @@
  */
 package combigraph.lab.experiments;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ca.uqac.lif.labpal.CommandRunner;
+import ca.uqac.lif.labpal.ExperimentException;
 import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
@@ -27,12 +32,22 @@ public class ColoringTestGenerationExperiment extends TestGenerationExperiment
 	 * Name of this particular tool
 	 */
 	public static final transient String NAME = "Coloring";
+
+	/**
+	 * The command used to launch the coloring program (DSATUR)
+	 */
+	protected static final transient String DSATUR_COMMAND = "./dsatur";
+
+	/**
+	 * The pattern to look for in the tool's output
+	 */
+	protected static final transient Pattern s_sizePattern = Pattern.compile("permutation is (\\d+)");
 	
 	public ColoringTestGenerationExperiment(CombinatorialTestingProblem problem)
 	{
 		super(problem, NAME);
 	}
-	
+
 	@Override
 	protected String runTool() 
 	{
@@ -40,14 +55,20 @@ public class ColoringTestGenerationExperiment extends TestGenerationExperiment
 		{
 			return "";
 		}
-		return null;
-	}
-	
-	@Override
-	protected int getSize(String tool_output)
-	{
-		// TODO Auto-generated method stub
-		return 0;
+		String[] command = new String[] {"./dsatur", m_problem.getFilenameFor(NAME)};
+		CommandRunner runner = new CommandRunner(command);
+		runner.run();
+		return runner.getString();
 	}
 
+	@Override
+	protected int getSize(String tool_output) throws ExperimentException
+	{
+		Matcher mat = s_sizePattern.matcher(tool_output);
+		if (mat.find())
+		{
+			return Integer.parseInt(mat.group(1));
+		}
+		throw new ExperimentException("No solution from the tool");
+	}
 }

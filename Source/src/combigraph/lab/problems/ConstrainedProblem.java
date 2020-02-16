@@ -91,7 +91,7 @@ public abstract class ConstrainedProblem extends TWayProblem
 		CommandRunner runner = new CommandRunner(command);
 		runner.run();
 		String s_graph_contents = runner.getString();
-		if (s_graph_contents == null || s_graph_contents.isEmpty())
+		if (s_graph_contents == null || s_graph_contents.trim().isEmpty())
 		{
 			throw new ExperimentException("Error when generating the graph");
 		}

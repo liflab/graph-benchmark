@@ -55,6 +55,14 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 	@Override
 	public void execute() throws ExperimentException, InterruptedException
 	{
+		// The condition below is a workaround for this LabPal bug:
+		// https://github.com/liflab/labpal/issues/86
+		if (!getErrorMessage().isEmpty())
+		{
+			// The experiment has failed to generate the necessary files
+			// No point in running anything
+			throw new ExperimentException(getErrorMessage());
+		}
 		long time_start = System.currentTimeMillis();
 		try
 		{
@@ -116,6 +124,8 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 	/**
 	 * Gets the number of test cases from the tool's output
 	 * @param tool_output The output of the tool at the standard output
+	 * @throws ExperimentException If no size can be extracted from the tool's
+	 * output (typically when it fails to find a solution)
 	 */
-	protected abstract int getSize(String tool_output);
+	protected abstract int getSize(String tool_output) throws ExperimentException;
 }

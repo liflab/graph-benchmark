@@ -264,7 +264,7 @@ public class TWayProblem extends CombinatorialTestingProblem
 		super.fillExperiment(e);
 		e.describe(T, "Interaction strength");
 		e.describe(V, "Domain size");
-		e.setInput(N, "Number of parameters");
+		e.describe(N, "Number of parameters");
 		e.setInput(T, m_t);
 		e.setInput(V, m_v);
 		e.setInput(N, m_n);

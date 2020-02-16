@@ -222,6 +222,10 @@ public class GraphLab extends Laboratory
 			twr.add(ForbiddenTuples.FRACTION_VALUES, 0, 0.1, 0.2, 0.5);
 			twr.add(ForbiddenTuples.FRACTION_VARS, 0, 0.1, 0.2, 0.5);
 			Group g = new Group("Universal constraints: forbidden tuples");
+			g.setDescription("In these experiments, the problem is to generate a combinatorial "
+					+ "test suite for given values of t, n and v, with the added constraint that "
+					+ "some combination of parameter values (the \"forbidden tuples\") cannot "
+					+ "appear in any test case.");
 			add(g);
 			{
 				// Fixing n and v, and t, varying the fraction
@@ -278,6 +282,10 @@ public class GraphLab extends Laboratory
 			twr.add(TESTING_PROBLEM_NAME, TestSuiteCompletion.NAME);
 			twr.addRange(TestSuiteCompletion.NUM_TESTS, 0, 50, 10);
 			Group g = new Group("Existential constraints: test suite completion");
+			g.setDescription("In these experiments, the problem is to generate a combinatorial "
+					+ "test suite for given values of t, n and v, with the added constraint that "
+					+ "an existing list of test cases must be included in the result. The tools "
+					+ "must therefore complete this partial test suite in the best possible way.");
 			add(g);
 			{
 				// Fixing n and v, and t, varying the number of tests
