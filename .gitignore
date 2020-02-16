@@ -20,7 +20,7 @@ data/
 
 # Top-level php, but not php in subfolders
 *.php
-!*/*.php
+!Source/**/*.php
 
 # Top-level jar, but not jars in subfolders (if any)
 *.jar

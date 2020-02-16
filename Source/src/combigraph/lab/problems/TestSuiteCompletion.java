@@ -170,7 +170,7 @@ public class TestSuiteCompletion extends ExistentialProblem
 				{
 					ps.print(" && ");
 				}
-				ps.print("p" + i + " = " + test[i]);
+				ps.print("p" + i + " == " + test[i]);
 			}
 			ps.println();
 		}
