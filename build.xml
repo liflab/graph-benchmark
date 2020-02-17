@@ -186,7 +186,7 @@
   <target name="compile" depends="init,junit,check-rt" description="Compile the sources">
     <mkdir dir="${build.bindir}"/>
     <javac
-      target="1.6" source="1.6"
+      target="1.7" source="1.7"
       bootclasspath="${java6.boot.classpath}"
       srcdir="${build.srcdir}"
       destdir="${build.bindir}"
