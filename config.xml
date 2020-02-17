@@ -30,10 +30,10 @@
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
-  <author>Emmett Brown</author>
+  <author>Edmond La Chance, Vincent Porta-Scarta, Sylvain Hallé</author>
   
   <!-- The project's main class -->
-  <mainclass>coloring.MyLaboratory</mainclass>
+  <mainclass>combigraph.lab.GraphLab</mainclass>
   
   <!-- Output jar -->
   <jar>

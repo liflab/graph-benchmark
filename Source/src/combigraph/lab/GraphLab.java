@@ -280,7 +280,7 @@ public class GraphLab extends Laboratory
 			TWayRegion twr = new TWayRegion(big_r);
 			//twr.addRange(N, n_min, n_max / 2);
 			twr.add(TESTING_PROBLEM_NAME, TestSuiteCompletion.NAME);
-			twr.addRange(TestSuiteCompletion.NUM_TESTS, 0, 50, 10);
+			twr.addRange(TestSuiteCompletion.NUM_TESTS, 0, 10, 2);
 			Group g = new Group("Existential constraints: test suite completion");
 			g.setDescription("In these experiments, the problem is to generate a combinatorial "
 					+ "test suite for given values of t, n and v, with the added constraint that "
@@ -342,12 +342,12 @@ public class GraphLab extends Laboratory
 		}
 		if (!FileHelper.fileExists("variables-to-graph.php"))
 		{
-			String script = FileHelper.internalFileToString(this, "../scripts/variables-to-graph.php");
+			String script = FileHelper.internalFileToString(this, "scripts/variables-to-graph.php");
 			FileHelper.writeFromString(new File("variables-to-graph.php"), script);
 		}
 		if (!FileHelper.fileExists("variables-to-hypergraph.php"))
 		{
-			String script = FileHelper.internalFileToString(this, "../scripts/variables-to-hypergraph.php");
+			String script = FileHelper.internalFileToString(this, "scripts/variables-to-hypergraph.php");
 			FileHelper.writeFromString(new File("variables-to-hypergraph.php"), script);
 		}
 		if (out != null && out.isEmpty())
