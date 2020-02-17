@@ -29,6 +29,7 @@ import ca.uqac.lif.labpal.Random;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
+import combigraph.lab.experiments.JennyTestCompletionExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TestingProblemExperiment;
 
@@ -75,7 +76,7 @@ public class TestSuiteCompletion extends ExistentialProblem
 	{
 		if (tool_name.compareTo(HypergraphTestGenerationExperiment.NAME) == 0 ||
 				tool_name.compareTo(ColoringTestGenerationExperiment.NAME) == 0 ||
-				tool_name.compareTo(JennyTestGenerationExperiment.NAME) == 0 ||
+				tool_name.compareTo(JennyTestCompletionExperiment.NAME) == 0 ||
 				tool_name.compareTo(ActsTestGenerationExperiment.NAME) == 0
 				)
 		{
@@ -83,6 +84,11 @@ public class TestSuiteCompletion extends ExistentialProblem
 			return true;
 		}
 		return false;
+	}
+	
+	public String getJennySeedFilename()
+	{
+		return TestingProblemExperiment.s_folder + "Jenny-completion-" + m_t + "-" + m_v + "-" + m_n + "-" + m_numTests + "-seed.txt";
 	}
 	
 	@Override
@@ -199,6 +205,20 @@ public class TestSuiteCompletion extends ExistentialProblem
 					ps.print(",");
 				}
 				ps.print(test[i] + 1);
+			}
+			ps.println();
+		}
+	}
+	
+	@Override
+	public void writeJennySeedFile(PrintStream ps)
+	{
+		for (int[] test : m_tests)
+		{
+			ps.print(" ");
+			for (int i = 0; i < test.length; i++)
+			{
+				ps.print(i + JennyTestGenerationExperiment.FEATURES[test[i]] + " ");
 			}
 			ps.println();
 		}

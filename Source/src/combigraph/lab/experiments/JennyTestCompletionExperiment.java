@@ -29,6 +29,7 @@ import java.util.List;
 import ca.uqac.lif.labpal.ExperimentException;
 import ca.uqac.lif.mtnp.util.FileHelper;
 import combigraph.lab.problems.ExistentialProblem;
+import combigraph.lab.problems.TestSuiteCompletion;
 
 /**
  * A special case of Jenny experiment for the {@link TestSuiteCompletion} test
@@ -37,7 +38,7 @@ import combigraph.lab.problems.ExistentialProblem;
  */
 public class JennyTestCompletionExperiment extends JennyTestGenerationExperiment 
 {
-	public JennyTestCompletionExperiment(ExistentialProblem problem) 
+	public JennyTestCompletionExperiment(TestSuiteCompletion problem) 
 	{
 		super(problem);
 	}
@@ -46,7 +47,7 @@ public class JennyTestCompletionExperiment extends JennyTestGenerationExperiment
 	protected List<String> getAdditionalParameters()
 	{
 		List<String> out = new ArrayList<String>(1);
-		out.add("-o" + ((ExistentialProblem) m_problem).getJennySeedFilename());
+		out.add("-o" + ((TestSuiteCompletion) m_problem).getJennySeedFilename());
 		return out;
 	}
 	
@@ -57,14 +58,14 @@ public class JennyTestCompletionExperiment extends JennyTestGenerationExperiment
 		{
 			return false;
 		}
-		String seed_filename = ((ExistentialProblem) m_problem).getJennySeedFilename();
+		String seed_filename = ((TestSuiteCompletion) m_problem).getJennySeedFilename();
 		return FileHelper.fileExists(seed_filename);
 	}
 	
 	@Override
 	public void fulfillPrerequisites() throws ExperimentException
 	{
-		String seed_filename = ((ExistentialProblem) m_problem).getJennySeedFilename();
+		String seed_filename = ((TestSuiteCompletion) m_problem).getJennySeedFilename();
 		File f = new File(seed_filename);
 		try
 		{

@@ -22,7 +22,6 @@ import java.io.PrintStream;
 
 import ca.uqac.lif.labpal.Random;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
-import combigraph.lab.experiments.TestingProblemExperiment;
 
 /**
  * Combinatorial "t-way" problem, to which existential constraints are added.
@@ -50,11 +49,6 @@ public abstract class ExistentialProblem extends ConstrainedProblem
 			return false;
 		}
 		return super.supportedBy(tool_name);
-	}
-	
-	public String getJennySeedFilename()
-	{
-		return TestingProblemExperiment.s_folder + "Jenny-completion-" + m_t + "-" + m_v + "-" + m_n + "-seed.txt";
 	}
 	
 	public void writeJennySeedFile(PrintStream ps)

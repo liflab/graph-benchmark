@@ -59,7 +59,7 @@ public class ActsTestGenerationExperiment extends TestGenerationExperiment
 		}
 		File temp = File.createTempFile("temp-input-FOO", ".ncond");
 		int t = ((TWayProblem) m_problem).getT();
-		String[] command = {"java", "-Doutput=numeric", "-Ddoi=" + t, "-jar", s_actsJarName, m_problem.getFilenameFor(NAME), temp.getAbsolutePath()};
+		String[] command = {"java", "-Dmode=extend", "-Doutput=numeric", "-Ddoi=" + t, "-jar", s_actsJarName, m_problem.getFilenameFor(NAME), temp.getAbsolutePath()};
 		CommandRunner runner = new CommandRunner(command);
 		runner.run();
 		temp.delete();
