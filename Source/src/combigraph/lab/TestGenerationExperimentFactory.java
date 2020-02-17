@@ -32,7 +32,6 @@ import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TcasesTestGenerationExperiment;
 import combigraph.lab.experiments.TestGenerationExperiment;
 import combigraph.lab.problems.CombinatorialTestingProblem;
-import combigraph.lab.problems.ExistentialProblem;
 import combigraph.lab.problems.ForbiddenTuples;
 import combigraph.lab.problems.IncreasingValues;
 import combigraph.lab.problems.TWayProblem;
@@ -80,9 +79,9 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 			{
 				return new JennyForbiddenTuplesExperiment((UniversalProblem) problem);
 			}
-			if (problem instanceof ExistentialProblem)
+			if (problem instanceof TestSuiteCompletion)
 			{
-				return new JennyTestCompletionExperiment((ExistentialProblem) problem);
+				return new JennyTestCompletionExperiment((TestSuiteCompletion) problem);
 			}
 			return new JennyTestGenerationExperiment(problem);
 		}

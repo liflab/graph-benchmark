@@ -213,12 +213,16 @@ public class TestSuiteCompletion extends ExistentialProblem
 	@Override
 	public void writeJennySeedFile(PrintStream ps)
 	{
+		if (m_tests == null)
+		{
+			m_tests = generateExistingTests();
+		}
 		for (int[] test : m_tests)
 		{
 			ps.print(" ");
 			for (int i = 0; i < test.length; i++)
 			{
-				ps.print(i + JennyTestGenerationExperiment.FEATURES[test[i]] + " ");
+				ps.print((i + 1) + JennyTestGenerationExperiment.FEATURES[test[i]] + " ");
 			}
 			ps.println();
 		}
