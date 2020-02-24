@@ -108,8 +108,8 @@ public class GraphLab extends Laboratory
 		// Default parameters
 		boolean with_t_way = false, 
 				with_forbidden_tuples = false, 
-				with_increasing_values = false,
-				with_test_suite_completion = true;
+				with_increasing_values = true,
+				with_test_suite_completion = false;
 
 		// Setup the lab's factory
 		TestGenerationExperimentFactory factory = new TestGenerationExperimentFactory(this, getRandom());
@@ -118,9 +118,11 @@ public class GraphLab extends Laboratory
 		File data_folder = new File(TestingProblemExperiment.s_folder);
 		data_folder.mkdir();
 
-		t_max = 3;
-		v_max = 5;
-		n_max = 6;
+		t_min = 2;
+		t_max = 2;
+		v_min = 6;
+		v_max = 6;
+		//n_max = 6;
 
 		// Setup the lab's regions
 		TWayRegion big_r = new TWayRegion();
@@ -175,20 +177,20 @@ public class GraphLab extends Laboratory
 			add(g);
 			{
 				// Fixing n and v, varying t
-				for (Region out_r : twr.all(N, V))
+				for (Region out_r : twr.all(T, V))
 				{
 					boolean added = false;
-					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, T, SIZE);
+					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, N, SIZE);
 					et_size.setShowInList(false);
 					TransformedTable tt_size = new TransformedTable(new ExpandAsColumns(TOOL_NAME, SIZE), et_size);
 					m_titleNamer.setTitle(tt_size, out_r, "Increasing values ", " for size");
 					Scatterplot p_size = new Scatterplot(tt_size);
-					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, T, DURATION);
+					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, N, DURATION);
 					et_duration.setShowInList(false);
 					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_duration);
 					m_titleNamer.setTitle(tt_duration, out_r, "Increasing values ", " for duration");
 					Scatterplot p_duration = new Scatterplot(tt_duration);
-					for (Region in_r : out_r.all(T, TOOL_NAME))
+					for (Region in_r : out_r.all(N, TOOL_NAME))
 					{
 						TestGenerationExperiment exp = factory.get(in_r);
 						if (exp == null)

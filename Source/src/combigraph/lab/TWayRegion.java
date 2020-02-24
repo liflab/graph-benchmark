@@ -36,6 +36,11 @@ public class TWayRegion extends Region
 	@Override
 	public boolean isInRegion(Region r) 
 	{
+		if (r.getAll(TWayProblem.N).size() > 1 || r.getInt(TWayProblem.T) > 1)
+		{
+			// One of T and N is not yet defined
+			return true;
+		}
 		if (r.getInt(TWayProblem.T) >= r.getInt(TWayProblem.N))
 		{
 			// Impossible that t > n, uninteresting when t=n

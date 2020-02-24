@@ -119,8 +119,8 @@ public class IncreasingValues extends UniversalProblem
 		ps.println("[Constraints]");
 		for (int n_i = 0; n_i < m_n - 1; n_i++)
 		{
-			String p1 = "p" + n_i;
-			String p2 = "p" + (n_i + 1);
+			String p1 = "p" + (n_i + 1);
+			String p2 = "p" + (n_i + 2);
 			if (n_i > 0)
 			{
 				ps.print(" && ");
