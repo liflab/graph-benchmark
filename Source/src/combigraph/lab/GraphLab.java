@@ -33,6 +33,7 @@ import ca.uqac.lif.mtnp.table.ExpandAsColumns;
 import ca.uqac.lif.mtnp.table.TransformedTable;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
+import combigraph.lab.experiments.CasaTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
@@ -106,9 +107,9 @@ public class GraphLab extends Laboratory
 	public void setup()
 	{
 		// Default parameters
-		boolean with_t_way = false, 
+		boolean with_t_way = true, 
 				with_forbidden_tuples = false, 
-				with_increasing_values = true,
+				with_increasing_values = false,
 				with_test_suite_completion = false;
 
 		// Setup the lab's factory
@@ -119,10 +120,10 @@ public class GraphLab extends Laboratory
 		data_folder.mkdir();
 
 		t_min = 2;
-		t_max = 2;
-		v_min = 6;
+		t_max = 3;
+		v_min = 2;
 		v_max = 6;
-		//n_max = 6;
+		n_max = 6;
 
 		// Setup the lab's regions
 		TWayRegion big_r = new TWayRegion();
@@ -132,10 +133,11 @@ public class GraphLab extends Laboratory
 		big_r.add(TOOL_NAME,
 				ActsTestGenerationExperiment.NAME,
 				AllPairsTestGenerationExperiment.NAME,
+				CasaTestGenerationExperiment.NAME,
 				JennyTestGenerationExperiment.NAME,
 				TcasesTestGenerationExperiment.NAME,
 				VPTagTestGenerationExperiment.NAME,
-				ColoringTestGenerationExperiment.NAME, 
+				//ColoringTestGenerationExperiment.NAME, 
 				HypergraphTestGenerationExperiment.NAME);
 
 		// Classical t-way problems
@@ -341,6 +343,10 @@ public class GraphLab extends Laboratory
 		if (!FileHelper.commandExists(JennyTestGenerationExperiment.JENNY))
 		{
 			out += "<li>Command <tt>jenny</tt> not found. Experiments involving running Jenny will not work</li>";
+		}
+		if (!FileHelper.commandExists(CasaTestGenerationExperiment.CASA))
+		{
+			out += "<li>Command <tt>CASA</tt> not found. Experiments involving running CASA will not work</li>";
 		}
 		if (!FileHelper.fileExists("variables-to-graph.php"))
 		{

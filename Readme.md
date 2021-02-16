@@ -3,8 +3,8 @@ A benchmark for single-machine test-case generation tools
 
 | Author:      | Edmond La Chance, Vincent Porta-Scarta, Sylvain Hallé |
 | Contact:     | edmond.la-chance@uqac.ca                              |
-| Version:     | 3.0                                                   |
-| Date:        | 2020-02-16                                            |
+| Version:     | 3.1                                                   |
+| Date:        | 2021-02-16                                            |
 
 This project contains a benchmark aimed at comparing multiple combinatorial
 test generation tools on the same set of problem instances. In a nutshell,
@@ -76,13 +76,15 @@ The benchmark is designed to compare the following tools:
   January 17th, 2015.
 - [ACTS](https://csrc.nist.gov/Projects/automated-combinatorial-testing-for-software/downloadable-tools)
   version 3.1
+- A [forked version](https://github.com/sylvainhalle/casa) of
+  [CASA](https://cse.unl.edu/~citportal/) 1.1b
 
 Requirements
 ------------
 
 - Some other tools are Linux 32-bit executables (Jenny, QICT, the main
-  DSATUR program); you'll need to recompile them if you want to use them on
-  other systems
+  DSATUR program, CASA); you'll need to recompile them if you want to use them
+  on other systems.
 
 Running LabPal
 --------------

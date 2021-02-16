@@ -31,6 +31,7 @@ import ca.uqac.lif.testing.tway.DotGraphGenerator;
 import ca.uqac.lif.testing.tway.EdnGenerator;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
+import combigraph.lab.experiments.CasaTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.TcasesTestGenerationExperiment;
@@ -210,6 +211,11 @@ public class TWayProblem extends CombinatorialTestingProblem
 			}
 			break;
 		}
+		case CasaTestGenerationExperiment.NAME:
+		{
+			CasaTestGenerationExperiment.writeSpecFile(ps, m_t, m_n, m_v);
+			break;
+		}
 		case AllPairsTestGenerationExperiment.NAME:
 		{
 			break;
@@ -253,6 +259,9 @@ public class TWayProblem extends CombinatorialTestingProblem
 			break;
 		case TcasesTestGenerationExperiment.NAME:
 			extension = ".xml";
+			break;
+		case CasaTestGenerationExperiment.NAME:
+			extension = ".citmodel";
 			break;
 		}
 		return TestingProblemExperiment.s_folder + tool_name + "-comb-" + m_t + "-" + m_v + "-" + m_n + extension;

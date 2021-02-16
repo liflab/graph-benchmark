@@ -24,6 +24,7 @@ import ca.uqac.lif.labpal.Random;
 import ca.uqac.lif.labpal.Region;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
+import combigraph.lab.experiments.CasaTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyForbiddenTuplesExperiment;
@@ -96,6 +97,10 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		case AllPairsTestGenerationExperiment.NAME:
 		{
 			return new AllPairsTestGenerationExperiment(problem);
+		}
+		case CasaTestGenerationExperiment.NAME:
+		{
+			return new CasaTestGenerationExperiment(problem);
 		}
 		case ColoringTestGenerationExperiment.NAME:
 		{
