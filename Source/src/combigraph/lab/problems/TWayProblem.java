@@ -1,6 +1,6 @@
 /*
     A lab for comparing combinatorial test suite generators
-    Copyright (C) 2017-2020 Sylvain Hallé, Edmond La Chance,
+    Copyright (C) 2017-2021 Sylvain Hallé, Edmond La Chance,
     Vincent Porta-Scarta
 
     This program is free software: you can redistribute it and/or modify
@@ -304,5 +304,28 @@ public class TWayProblem extends CombinatorialTestingProblem
 	public int getN()
 	{
 		return m_n;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return m_t + "," + m_n + "," + m_v;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return m_t + m_v + m_n;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null || !(o instanceof TWayProblem))
+		{
+			return false;
+		}
+		TWayProblem t = (TWayProblem) o;
+		return t.m_n == m_n && t.m_t == m_t && t.m_v == m_v;
 	}
 }

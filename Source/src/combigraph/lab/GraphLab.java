@@ -35,6 +35,7 @@ import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.CasaTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
+import combigraph.lab.experiments.GbgaTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyTestGenerationExperiment;
 import combigraph.lab.experiments.TcasesTestGenerationExperiment;
@@ -131,13 +132,14 @@ public class GraphLab extends Laboratory
 		big_r.addRange(V, v_min, v_max);
 		big_r.addRange(N, n_min, n_max);
 		big_r.add(TOOL_NAME,
-				ActsTestGenerationExperiment.NAME,
-				AllPairsTestGenerationExperiment.NAME,
+				//ActsTestGenerationExperiment.NAME,
+				//AllPairsTestGenerationExperiment.NAME,
 				CasaTestGenerationExperiment.NAME,
 				JennyTestGenerationExperiment.NAME,
-				TcasesTestGenerationExperiment.NAME,
-				VPTagTestGenerationExperiment.NAME,
+				//TcasesTestGenerationExperiment.NAME,
+				//VPTagTestGenerationExperiment.NAME,
 				//ColoringTestGenerationExperiment.NAME, 
+				GbgaTestGenerationExperiment.NAME,
 				HypergraphTestGenerationExperiment.NAME);
 
 		// Classical t-way problems
@@ -152,7 +154,15 @@ public class GraphLab extends Laboratory
 				for (Region out_r : twr.all(N, V))
 				{
 					ExperimentTable et_size = new ExperimentTable(TOOL_NAME, T, SIZE);
+					et_size.setShowInList(false);
+					TransformedTable tt_size = new TransformedTable(new ExpandAsColumns(TOOL_NAME, SIZE), et_size);
+					m_titleNamer.setTitle(tt_size, out_r, "Classical t-way ", " for size");
+					Scatterplot p_size = new Scatterplot(tt_size);
 					ExperimentTable et_duration = new ExperimentTable(TOOL_NAME, T, DURATION);
+					et_duration.setShowInList(false);
+					TransformedTable tt_duration = new TransformedTable(new ExpandAsColumns(TOOL_NAME, DURATION), et_duration);
+					m_titleNamer.setTitle(tt_duration, out_r, "Classical t-way ", " for duration");
+					Scatterplot p_duration = new Scatterplot(tt_duration);
 					for (Region in_r : out_r.all(T, TOOL_NAME))
 					{
 						TestGenerationExperiment exp = factory.get(in_r);
@@ -164,8 +174,8 @@ public class GraphLab extends Laboratory
 						et_duration.add(exp);
 						g.add(exp);
 					}
-					add(et_size);
-					add(et_duration);
+					add(tt_size, tt_duration);
+					add(p_size, p_duration);
 				}
 			}
 		}

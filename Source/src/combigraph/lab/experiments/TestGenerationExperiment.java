@@ -119,7 +119,11 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 	 * @return The output of the tool at the standard output
 	 * @throws IOException If something "goes bad" when running the tool
 	 */
-	protected abstract String runTool() throws IOException;
+	protected String runTool() throws IOException
+	{
+		// By default, do nothing
+		return null;
+	}
 
 	/**
 	 * Gets the number of test cases from the tool's output
@@ -127,5 +131,8 @@ public abstract class TestGenerationExperiment extends TestingProblemExperiment
 	 * @throws ExperimentException If no size can be extracted from the tool's
 	 * output (typically when it fails to find a solution)
 	 */
-	protected abstract int getSize(String tool_output) throws ExperimentException;
+	protected int getSize(String tool_output) throws ExperimentException
+	{
+		return 0;
+	}
 }

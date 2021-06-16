@@ -1,6 +1,6 @@
 /*
     A lab for comparing combinatorial test suite generators
-    Copyright (C) 2017-2020 Sylvain Hallé, Edmond La Chance,
+    Copyright (C) 2017-2021 Sylvain Hallé, Edmond La Chance,
     Vincent Porta-Scarta
 
     This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@ import combigraph.lab.experiments.ActsTestGenerationExperiment;
 import combigraph.lab.experiments.AllPairsTestGenerationExperiment;
 import combigraph.lab.experiments.CasaTestGenerationExperiment;
 import combigraph.lab.experiments.ColoringTestGenerationExperiment;
+import combigraph.lab.experiments.GbgaTestGenerationExperiment;
 import combigraph.lab.experiments.HypergraphTestGenerationExperiment;
 import combigraph.lab.experiments.JennyForbiddenTuplesExperiment;
 import combigraph.lab.experiments.JennyTestCompletionExperiment;
@@ -101,6 +102,10 @@ public class TestGenerationExperimentFactory extends ExperimentFactory<GraphLab,
 		case CasaTestGenerationExperiment.NAME:
 		{
 			return new CasaTestGenerationExperiment(problem);
+		}
+		case GbgaTestGenerationExperiment.NAME:
+		{
+			return new GbgaTestGenerationExperiment(problem);
 		}
 		case ColoringTestGenerationExperiment.NAME:
 		{
