@@ -16,7 +16,7 @@ Source/lib/
 Source/dep/
 Source/doc/
 /tests/
-data/
+Source/data/
 
 # Top-level php, but not php in subfolders
 *.php
