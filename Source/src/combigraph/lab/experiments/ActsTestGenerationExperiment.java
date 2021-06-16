@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.uqac.lif.labpal.CommandRunner;
 import combigraph.lab.GraphLab;
+import combigraph.lab.TimeoutCommandRunner;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.TWayProblem;
 
@@ -60,7 +60,8 @@ public class ActsTestGenerationExperiment extends TestGenerationExperiment
 		File temp = File.createTempFile("temp-input-FOO", ".ncond");
 		int t = ((TWayProblem) m_problem).getT();
 		String[] command = {"java", "-Dmode=extend", "-Doutput=numeric", "-Ddoi=" + t, "-jar", s_actsJarName, m_problem.getFilenameFor(NAME), temp.getAbsolutePath()};
-		CommandRunner runner = new CommandRunner(command);
+		TimeoutCommandRunner runner = new TimeoutCommandRunner(command);
+		runner.setTimeout(getMaxDuration());
 		runner.run();
 		temp.delete();
 		return runner.getString();

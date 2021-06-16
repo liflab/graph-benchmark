@@ -93,6 +93,11 @@ public class GraphLab extends Laboratory
 	 * Upper bound for parameter <i>n</i> in the experiments
 	 */
 	public static int n_max = 20;
+	
+	/**
+	 * The maximum duration given to an experiment, in milliseconds
+	 */
+	public static int s_timeout = 100000;
 
 	/**
 	 * A name for LaTeX tables and figures

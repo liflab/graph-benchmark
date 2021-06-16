@@ -18,8 +18,8 @@
  */
 package combigraph.lab.experiments;
 
-import ca.uqac.lif.mtnp.util.CommandRunner;
 import combigraph.lab.GraphLab;
+import combigraph.lab.TimeoutCommandRunner;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
 public class HypergraphTestGenerationExperiment extends TestGenerationExperiment
@@ -41,7 +41,8 @@ public class HypergraphTestGenerationExperiment extends TestGenerationExperiment
 		{
 			return "";
 		}
-		CommandRunner runner = new CommandRunner(new String[] {"java", "-jar", "hitting-set-0.9.0-standalone.jar", m_problem.getFilenameFor(NAME)});
+		TimeoutCommandRunner runner = new TimeoutCommandRunner(new String[] {"java", "-jar", "hitting-set-0.9.0-standalone.jar", m_problem.getFilenameFor(NAME)});
+		runner.setTimeout(getMaxDuration());
 		runner.run();
 		return runner.getString();
 	}

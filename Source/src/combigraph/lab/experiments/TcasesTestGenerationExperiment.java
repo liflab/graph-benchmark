@@ -21,8 +21,8 @@ package combigraph.lab.experiments;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ca.uqac.lif.mtnp.util.CommandRunner;
 import combigraph.lab.GraphLab;
+import combigraph.lab.TimeoutCommandRunner;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.TWayProblem;
 
@@ -55,7 +55,8 @@ public class TcasesTestGenerationExperiment extends TestGenerationExperiment
 		// as input file
 		String t_filename = "Tcases-t-" + t + ".xml";
 		String[] command = {"java", "-jar", "tcases.jar", "-g", t_filename, m_problem.getFilenameFor(NAME)};
-		CommandRunner runner = new CommandRunner(command);
+		TimeoutCommandRunner runner = new TimeoutCommandRunner(command);
+		runner.setTimeout(getMaxDuration());
 		runner.run();
 		return runner.getString();
 	}

@@ -19,6 +19,7 @@
 package combigraph.lab.experiments;
 
 import ca.uqac.lif.labpal.Experiment;
+import combigraph.lab.GraphLab;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
 public abstract class TestingProblemExperiment extends Experiment
@@ -42,6 +43,7 @@ public abstract class TestingProblemExperiment extends Experiment
 		super();
 		m_problem = problem;
 		problem.fillExperiment(this);
+		setMaxDuration(GraphLab.s_timeout);
 	}
 	
 	/**

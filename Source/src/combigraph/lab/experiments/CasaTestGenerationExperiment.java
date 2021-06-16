@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import ca.uqac.lif.labpal.CommandRunner;
 import combigraph.lab.GraphLab;
+import combigraph.lab.TimeoutCommandRunner;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 
 /**
@@ -59,7 +59,8 @@ public class CasaTestGenerationExperiment extends TestGenerationExperiment
 		}
 		File temp_out = File.createTempFile("temp-CASA-", ".out");
 		String[] command = {CASA, "--output", temp_out.getAbsolutePath(), m_problem.getFilenameFor(NAME)};
-		CommandRunner runner = new CommandRunner(command);
+		TimeoutCommandRunner runner = new TimeoutCommandRunner(command);
+		runner.setTimeout(getMaxDuration());
 		runner.run();
 		Scanner scanner = new Scanner(temp_out);
 		String line = scanner.nextLine();

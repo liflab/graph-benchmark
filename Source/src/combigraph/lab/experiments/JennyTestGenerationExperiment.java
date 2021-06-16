@@ -22,9 +22,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.uqac.lif.labpal.CommandRunner;
 import ca.uqac.lif.mtnp.util.FileHelper;
 import combigraph.lab.GraphLab;
+import combigraph.lab.TimeoutCommandRunner;
 import combigraph.lab.problems.CombinatorialTestingProblem;
 import combigraph.lab.problems.TWayProblem;
 
@@ -77,7 +77,8 @@ public class JennyTestGenerationExperiment extends TestGenerationExperiment
 		FileHelper.writeFromString(new File(syntax_filename), "#! /bin/bash\n" + syntax);
 		if (!GraphLab.s_dryRun)
 		{
-			CommandRunner runner = new CommandRunner(toStringArray(syntax));
+			TimeoutCommandRunner runner = new TimeoutCommandRunner(toStringArray(syntax));
+			runner.setTimeout(getMaxDuration());
 			runner.run();
 			return runner.getString();
 		}
